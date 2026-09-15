@@ -1,9 +1,10 @@
 import { Router } from "express";
 // Este solo es un ejemplo de como meter las rutas
-import companiesRoutes from "../modules/companies/companies.routes";
+
+import authRoutes from "../modules/auth/auth.routes";
 
 const router = Router();
 
-router.use("/companies", companiesRoutes);
+router.use("/auth", authRoutes);
 
 export default router;
