@@ -10,13 +10,17 @@ import { prisma } from "../../config/prisma";
 
 export class AuthService {
   async register(data: AuthInput) {
-    const { data: authData, error } = await supabase.auth.admin.createUser({
+    const { data: authData, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
     });
 
     if (error) {
       throw new CustomError(400, error.message);
+    }
+
+    if (!authData.user) {
+      throw new CustomError(400, "No se pudo crear el usuario");
     }
 
     const user = await prisma.public_users.create({
@@ -33,7 +37,6 @@ export class AuthService {
 
     return user;
   }
-
   async login(data: AuthLogin) {
     const credentials = {
       email: data.email,
