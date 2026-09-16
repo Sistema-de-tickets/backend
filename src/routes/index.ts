@@ -1,6 +1,10 @@
 import { Router } from "express";
-// Este solo es un ejemplo de como meter las rutas
+import usuariosRouter from "../modules/usuarios/usuarios.routes";
+import authRouter from "../modules/auth/auth.routes";
 
 const router = Router();
+
+router.use("/auth", authRouter);
+router.use("/users", usuariosRouter);
 
 export default router;
