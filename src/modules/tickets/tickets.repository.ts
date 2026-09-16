@@ -1,9 +1,16 @@
-import { CreateTicketInput, UpdateTicketInput } from "./tickets.schema";
+import {
+  CreateTicketInput,
+  PriorityInput,
+  statusInput,
+  UpdateTicketInput,
+} from "./tickets.schema";
+import { ticketInclude } from "./tickets.types";
 
 import { prisma } from "../../config/prisma";
 
 export const getTicketsRepository = async () => {
   return prisma.tickets.findMany({
+    include: ticketInclude,
     orderBy: {
       created_at: "desc",
     },
@@ -15,14 +22,16 @@ export const getTicketByIdRepository = async (id: string) => {
     where: {
       id,
     },
+    include: ticketInclude,
   });
 };
 
+export const findAllCategories = async () => {
+  return prisma.categories.findMany({ orderBy: { name: "asc" } });
+};
+
 // Reglas de negocio a investigar:
-// ¿Un usuario puede crear tickets?
 // ¿La categoría pertenece al área seleccionada?
-// ¿Cómo se genera el code único del ticket?
-// ¿Quién puede asignar el ticket posteriormente?
 export const createTicketRepository = async (
   data: CreateTicketInput,
   userId: string,
@@ -36,6 +45,7 @@ export const createTicketRepository = async (
       description: data.description,
       priority: data.priority,
     },
+    include: ticketInclude,
   });
 };
 
@@ -48,6 +58,43 @@ export const updateTicketByIdRepository = async (
       id,
     },
     data,
+    include: ticketInclude,
+  });
+};
+
+export const updateTicketPriorityRepository = async (
+  id: string,
+  priority: PriorityInput["priority"],
+) => {
+  return prisma.tickets.update({
+    where: { id },
+    data: { priority },
+    include: ticketInclude,
+  });
+};
+
+export const updateTicketStatusRepository = async (
+  id: string,
+  status: statusInput["status"],
+) => {
+  return prisma.tickets.update({
+    where: { id },
+    data: {
+      status,
+      resolved_at: status === "resuelto" ? new Date() : null,
+    },
+    include: ticketInclude,
+  });
+};
+
+export const assignTicketRepository = async (
+  id: string,
+  assignedTo: string,
+) => {
+  return prisma.tickets.update({
+    where: { id },
+    data: { assigned_to: assignedTo },
+    include: ticketInclude,
   });
 };
 
