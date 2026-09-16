@@ -22,11 +22,13 @@ export const errorMiddleware = (
   }
 
   if (error instanceof Error) {
+    console.error(error);
     return res.status(500).json({
       message: "Error interno del servidor",
     });
   }
 
+  console.error(error);
   return res.status(500).json({
     message: "Error inesperado",
   });

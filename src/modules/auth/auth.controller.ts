@@ -20,6 +20,7 @@ export class AuthController {
       }
 
       const user = await authService.register(data);
+      console.log(user);
 
       return res.status(201).json({
         message: "Usuario creado correctamente",

@@ -19,7 +19,7 @@ export class AuthService {
       throw new CustomError(400, error.message);
     }
 
-    const user = await prisma.users.create({
+    const user = await prisma.public_users.create({
       data: {
         id: authData.user.id,
         primer_nombre: data.primer_nombre,

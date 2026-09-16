@@ -7,6 +7,7 @@ export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts",
   },
   // Note: this only affects the Prisma CLI (db pull, migrate, studio...).
   // The running app builds its own connection via @prisma/adapter-pg from
